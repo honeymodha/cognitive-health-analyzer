@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cognitive Health Analyzer</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f7fb;
+text-align:center;
+padding:40px;
+}
+
+.container{
+background:white;
+width:450px;
+margin:auto;
+padding:30px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h2{
+color:#333;
+}
+
+label{
+font-weight:bold;
+}
+
+input[type=range]{
+width:100%;
+}
+
+button{
+margin-top:20px;
+padding:10px 20px;
+border:none;
+background:#007bff;
+color:white;
+font-size:16px;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0056b3;
+}
+
+.result{
+margin-top:25px;
+padding:15px;
+border-radius:8px;
+font-weight:bold;
+}
+
+.good{
+background:#d4edda;
+color:#155724;
+}
+
+.moderate{
+background:#fff3cd;
+color:#856404;
+}
+
+.poor{
+background:#f8d7da;
+color:#721c24;
+}
+
+.recommendations{
+text-align:left;
+margin-top:10px;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+<h2>Cognitive Health Analyzer</h2>
+
+<p>Enter your daily habits</p>
+
+<label>Sleep Hours: <span id="sleepVal">7</span></label>
+<input type="range" id="sleep" min="3" max="10" value="7"
+oninput="sleepVal.innerText=this.value">
+
+<br><br>
+
+<label>Screen Time (hours): <span id="screenVal">5</span></label>
+<input type="range" id="screen" min="0" max="12" value="5"
+oninput="screenVal.innerText=this.value">
+
+<br><br>
+
+<label>Reading Time (minutes): <span id="readVal">20</span></label>
+<input type="range" id="reading" min="0" max="120" value="20"
+oninput="readVal.innerText=this.value">
+
+<br><br>
+
+<label>Do you use phone before sleep?</label>
+
+<br>
+
+<select id="phone">
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
+
+<br>
+
+<button onclick="analyze()">Analyze Cognitive Health</button>
+
+<div id="output"></div>
+
+</div>
+
+
+<script>
+
+function analyze(){
+
+let sleep = document.getElementById("sleep").value;
+let screen = document.getElementById("screen").value;
+let reading = document.getElementById("reading").value;
+let phone = document.getElementById("phone").value;
+
+let score = 50;
+let rec = [];
+
+
+/* Sleep scoring */
+
+if(sleep >= 7 && sleep <= 9){
+score += 20;
+}else if(sleep < 6){
+score -= 15;
+rec.push("Increase sleep to at least 7 hours for better cognitive performance.");
+}
+
+
+/* Screen time scoring */
+
+if(screen > 6){
+score -= 20;
+rec.push("Reduce screen time to less than 5 hours daily.");
+}else if(screen < 4){
+score += 10;
+}
+
+
+/* Reading scoring */
+
+if(reading >= 30){
+score += 15;
+}else{
+rec.push("Increase reading time to at least 30 minutes daily.");
+}
+
+
+/* Phone before sleep */
+
+if(phone === "yes"){
+score -= 10;
+rec.push("Avoid phone usage 30 minutes before bedtime.");
+}else{
+score += 5;
+}
+
+
+/* Limit score */
+
+if(score > 100) score = 100;
+if(score < 0) score = 0;
+
+
+/* Determine status */
+
+let status = "";
+let className = "";
+
+if(score >= 75){
+status = "Good Cognitive Health";
+className = "good";
+}
+else if(score >= 50){
+status = "Moderate Cognitive Health";
+className = "moderate";
+}
+else{
+status = "Poor Cognitive Health";
+className = "poor";
+}
+
+
+/* Recommendations */
+
+let recommendations = rec.length > 0
+? "<ul><li>" + rec.join("</li><li>") + "</li></ul>"
+: "Great job! Your habits support good cognitive health.";
+
+
+/* Output */
+
+document.getElementById("output").innerHTML =
+
+`<div class="result ${className}">
+Cognitive Score: ${score}/100
+<br>
+Status: ${status}
+<div class="recommendations">
+<h4>Recommendations</h4>
+${recommendations}
+</div>
+</div>`;
+
+}
+
+</script>
+
+</body>
+</html>
