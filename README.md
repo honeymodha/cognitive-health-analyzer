@@ -13,3 +13,6 @@ Interactive UI using sliders
 HTML  
 CSS  
 JavaScript  
+
+Live Demo:
+(https://honeymodha.github.io/cognitive-health-analyzer/)
